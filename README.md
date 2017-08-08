@@ -1,2 +1,2 @@
 # ansible-aws-kubernetes
-Automate Kubernetes cluster creation in AWS
+Automate kubernetes cluster creation in AWS
