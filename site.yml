@@ -1,0 +1,42 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: false
+  vars:
+    instance_group: kmaster
+    count: 1
+
+  roles:
+    - { role: ec2, when: "groups['{{ instance_group }}'] is not defined" }
+
+- hosts: kmaster
+  gather_facts: false
+  become: true
+  
+  roles:
+    - python
+    - docker
+    - kubernetes
+    - kubernetesmaster
+   # - weavescope
+
+- hosts: localhost
+  connection: local
+  gather_facts: false
+  vars:
+    instance_group: knode
+    count: 3
+
+  roles:
+    - { role: ec2, when: "groups['{{ instance_group }}'] is not defined" }
+
+- hosts: knode
+  gather_facts: false
+  become: true
+  
+  roles:
+    - python
+    - docker
+    - kubernetes
+    - kubernetesnode
+#     # - weavescope

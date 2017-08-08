@@ -1,0 +1,8 @@
+- name: copy join node sh
+  copy:
+    src: join.sh
+    dest: .
+    mode: "u=rw,g=r,o=rwx"
+
+- name: add node to master
+  shell: ./join.sh

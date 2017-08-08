@@ -1,0 +1,16 @@
+# - name: copy setup docker sh
+#   copy:
+#     src: docker.sh
+#     dest: .
+#     mode: "u=rw,g=r,o=rwx"
+
+- name: install docker
+  shell: |
+    curl -fsSL get.docker.com -o get-docker.sh
+    chmod +x get-docker.sh
+    ./get-docker.sh
+
+- name: docker service is running
+  service:
+    name: docker
+    state: started

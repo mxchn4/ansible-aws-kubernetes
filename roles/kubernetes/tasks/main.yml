@@ -1,0 +1,8 @@
+- name: copy setup sh
+  copy:
+    src: ksetup.sh
+    dest: .
+    mode: "u=rw,g=r,o=rwx"
+
+- name: setup kubeadm kubectl
+  shell: ./ksetup.sh

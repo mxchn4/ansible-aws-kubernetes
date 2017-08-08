@@ -1,0 +1,23 @@
+- name: init master
+  shell: kubeadm init | grep 'kubeadm join' | sed -e 's/^[ \t]*//'
+  register: joincmd
+
+- name: write join command to file
+  become: false
+  local_action: lineinfile path=roles/kubernetesnode/files/join.sh create=yes state=present line="{{ joincmd.stdout }} --skip-preflight-checks"
+  
+- name: setup master
+  shell: | 
+    mkdir -p $HOME/.kube
+    cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+    chown $(id -u):$(id -g) $HOME/.kube/config
+    kubectl apply -f https://git.io/weave-kube-1.6
+
+- name: copy dashboard yml
+  copy:
+    src: kube-dashboard.yaml
+    dest: .
+    mode: "u=rw,g=r,o=rwx"
+  
+- name: setup dashboard
+  shell: kubectl create -f kube-dashboard.yaml
